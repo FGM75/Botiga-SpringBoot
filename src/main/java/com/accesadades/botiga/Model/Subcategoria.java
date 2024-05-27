@@ -22,6 +22,6 @@ public class Subcategoria implements Serializable {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "subcategoria")
+    @OneToMany(mappedBy = "subcategory")
     private Set<Product> products;
 }

@@ -30,7 +30,7 @@ public class Product implements Serializable{
     @Column(name = "updated_at")
     private LocalDateTime updateDate;
 
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name="subcategory_id")
     private Subcategoria subcategory;  
 }
