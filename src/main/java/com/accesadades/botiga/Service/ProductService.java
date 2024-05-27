@@ -8,5 +8,6 @@ public interface ProductService {
     Set<Product> findAllProducts();
     Product findProductsByName(String name);
     Set<Product> findAllProducts(String subcategory);
+    void save(Product product);
     void increasePrice(Product product);
 }

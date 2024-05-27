@@ -28,7 +28,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void increasePrice(Product product) {
+    public void save(Product product) {
+        productRepository.save(product);
+    }
 
+    @Override
+    public void increasePrice(Product product) {
+        if (product != null) {
+            // Define el porcentaje de aumento. Por ejemplo, un 10% de aumento.
+            float increasePercentage = 0.10f;
+            
+            // Calcula el nuevo precio.
+            float newPrice = product.getPrice() * (1 + increasePercentage);
+            
+            // Actualiza el precio del producto.
+            product.setPrice(newPrice);
+            
+            // Guarda el producto actualizado en la base de datos.
+            productRepository.save(product);
+        }
     }
 }

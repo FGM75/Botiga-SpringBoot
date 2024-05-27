@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nou Producte</title>
+    <link th:href="@{/styles/style_product_form.css}" rel="stylesheet" />
+</head>
+<body>
+    <h1>Nou Producte</h1>
+    <form th:action="@{/productes/desar}" th:object="${product}" method="post">
+        <label for="name">Nom:</label>
+        <input type="text" id="name" name="name" th:field="*{name}" required>
+        
+        <label for="description">Descripció:</label>
+        <input type="text" id="description" name="description" th:field="*{description}" required>
+
+        <label for="company">Fabricant:</label>
+        <input type="text" id="company" name="company" th:field="*{company}" required>
+
+        <label for="price">Preu unitat:</label>
+        <input type="number" id="price" name="price" th:field="*{price}" required>
+
+        <label for="units">Unitats en estoc:</label>
+        <input type="number" id="units" name="units" th:field="*{units}" required>
+
+        <label for="subcategory">Subcategoria:</label>
+        <select id="subcategory" name="subcategory" th:field="*{subcategory}">
+            <option th:each="subcategoria : ${subcategories}" th:value="${subcategoria.name}" th:text="${subcategoria.name}"></option>
+        </select>
+
+        <label for="category">Categoria:</label>
+        <select id="category" name="category" th:field="*{categoria}">
+            <option th:each="categoria : ${categories}" th:value="${categoria.name}" th:text="${categoria.name}"></option>
+        </select>
+
+        <button type="submit">Desar</button>
+    </form>
+    <p><a th:href="@{/}">Torna a la pàgina d'inici</a></p>
+</body>
+</html>
