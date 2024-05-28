@@ -2,7 +2,6 @@ package com.accesadades.botiga.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Set;
 import com.accesadades.botiga.Model.Categoria;
 import com.accesadades.botiga.Repository.CategoriaRepository;
 
@@ -13,12 +12,12 @@ public class CategoriaServiceImpl implements CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     @Override
-    public Set<Categoria> findAllCategorias() {
-        return (Set<Categoria>) categoriaRepository.findAll();
+    public Categoria findByName(String name) {
+        return categoriaRepository.findByName(name);
     }
 
     @Override
-    public Categoria findByName(String name) {
-        return categoriaRepository.findByName(name);
+    public void save(Categoria categoria) {
+        categoriaRepository.save(categoria);
     }
 }

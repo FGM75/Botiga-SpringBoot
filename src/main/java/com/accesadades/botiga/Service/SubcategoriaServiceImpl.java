@@ -2,7 +2,6 @@ package com.accesadades.botiga.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Set;
 import com.accesadades.botiga.Model.Subcategoria;
 import com.accesadades.botiga.Repository.SubcategoriaRepository;
 
@@ -13,12 +12,12 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
     private SubcategoriaRepository subcategoriaRepository;
 
     @Override
-    public Set<Subcategoria> findAllSubcategorias() {
-        return (Set<Subcategoria>) subcategoriaRepository.findAll();
+    public Subcategoria findByName(String name) {
+        return subcategoriaRepository.findByName(name);
     }
 
     @Override
-    public Subcategoria findByName(String name) {
-        return subcategoriaRepository.findByName(name);
+    public void save(Subcategoria subcategoria) {
+        subcategoriaRepository.save(subcategoria);
     }
 }

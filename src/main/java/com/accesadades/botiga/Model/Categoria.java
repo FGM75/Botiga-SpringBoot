@@ -1,7 +1,7 @@
 package com.accesadades.botiga.Model;
 
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -10,14 +10,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "categorias")
+@Table(name = "categoria")
 public class Categoria implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
+
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "categoria")
-    private Set<Subcategoria> subcategorias;
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+    private Set<Subcategoria> subcategories;
 }

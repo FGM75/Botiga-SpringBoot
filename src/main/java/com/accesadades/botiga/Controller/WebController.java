@@ -4,13 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import com.accesadades.botiga.Model.Product;
-import com.accesadades.botiga.Model.Categoria;
-import com.accesadades.botiga.Model.Subcategoria;
-import com.accesadades.botiga.Service.ProductService;
-import com.accesadades.botiga.Service.CategoriaService;
-import com.accesadades.botiga.Service.SubcategoriaService;
+import com.accesadades.botiga.Model.*;
+import com.accesadades.botiga.Service.*;
 
 import java.util.Set;
 
@@ -21,10 +16,10 @@ public class WebController {
     private ProductService productService;
 
     @Autowired
-    private CategoriaService categoriaService;
+    private CategoriaServiceImpl categoriaService;
 
     @Autowired
-    private SubcategoriaService subcategoriaService;
+    private SubcategoriaServiceImpl subcategoriaService;
 
     @RequestMapping(value = "/")
     public String index(Model model) {
@@ -44,26 +39,57 @@ public class WebController {
             Product product = productService.findProductsByName(name);
             model.addAttribute("product", product);
         }
-        return "search";
+        return "search"; // Referencia a search.html en el directorio templates
     }
 
-    @GetMapping("/productes/nou")
-    public String showProductForm(Model model) {
+    @GetMapping("/productes/desar")
+    public String showCreateProductForm(Model model) {
         model.addAttribute("product", new Product());
-        model.addAttribute("subcategories", subcategoriaService.findAllSubcategorias());
-        model.addAttribute("categories", categoriaService.findAllCategorias());
         return "product_form";
     }
 
     @PostMapping("/productes/desar")
-    public String saveProduct(@ModelAttribute Product product, @RequestParam String subcategoria, @RequestParam String categoria) {
-        Subcategoria subcat = subcategoriaService.findByName(subcategoria);
-        Categoria cat = categoriaService.findByName(categoria);
-        if (subcat == null || cat == null || !subcat.getCategoria().equals(cat)) {
-            return "error";
+    public String saveProduct(@RequestParam String nom,
+                              @RequestParam String descripcio,
+                              @RequestParam long unitats,
+                              @RequestParam float preu,
+                              @RequestParam String fabricant,
+                              @RequestParam String subcategoria,
+                              @RequestParam String categoria,
+                              Model model) {
+
+        // Verifica si la categoría existe
+        Categoria existingCategory = categoriaService.findByName(categoria);
+        if (existingCategory == null) {
+            // Crea una nueva categoría si no existe
+            existingCategory = new Categoria();
+            existingCategory.setName(categoria);
+            categoriaService.save(existingCategory);
         }
-        product.setSubcategory(subcat);
+
+        // Verifica si la subcategoría existe y pertenece a la categoría dada
+        Subcategoria existingSubcategory = subcategoriaService.findByName(subcategoria);
+        if (existingSubcategory == null) {
+            // Crea una nueva subcategoría si no existe
+            existingSubcategory = new Subcategoria();
+            existingSubcategory.setName(subcategoria);
+            existingSubcategory.setCategoria(existingCategory);
+            subcategoriaService.save(existingSubcategory);
+        } else if (!existingSubcategory.getCategoria().getName().equals(categoria)) {
+            // Si la subcategoría no corresponde a la categoría, lanza un error
+            model.addAttribute("error", "La subcategoría no corresponde a la categoría dada.");
+            return "product_form";
+        }
+
+        // Crea y guarda el nuevo producto
+        Product product = new Product();
+        product.setName(nom);
+        product.setDescription(descripcio);
+        product.setUnits(unitats);
+        product.setPrice(preu);
+        product.setCompany(fabricant);
         productService.save(product);
-        return "redirect:/";
+
+        return "redirect:/catalog";
     }
 }
