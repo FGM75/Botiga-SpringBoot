@@ -16,10 +16,10 @@ public class WebController {
     private ProductService productService;
 
     @Autowired
-    private CategoriaServiceImpl categoriaService;
+    private CategoriaService categoriaService;
 
     @Autowired
-    private SubcategoriaServiceImpl subcategoriaService;
+    private SubcategoriaService subcategoriaService;
 
     @RequestMapping(value = "/")
     public String index(Model model) {
@@ -45,7 +45,7 @@ public class WebController {
     @GetMapping("/productes/desar")
     public String showCreateProductForm(Model model) {
         model.addAttribute("product", new Product());
-        return "product_form";
+        return "product";
     }
 
     @PostMapping("/productes/desar")
@@ -78,7 +78,7 @@ public class WebController {
         } else if (!existingSubcategory.getCategoria().getName().equals(categoria)) {
             // Si la subcategoría no corresponde a la categoría, lanza un error
             model.addAttribute("error", "La subcategoría no corresponde a la categoría dada.");
-            return "product_form";
+            return "product";
         }
 
         // Crea y guarda el nuevo producto

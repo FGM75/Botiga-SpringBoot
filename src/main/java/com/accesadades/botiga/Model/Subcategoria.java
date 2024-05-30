@@ -10,7 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "subcategoria")
+@Table(name = "subcategorias")
 public class Subcategoria implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
