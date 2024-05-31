@@ -12,39 +12,37 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    // Troba tots els productes
     @Override
     public Set<Product> findAllProducts() {
         return productRepository.findAll();
     }
 
+    // Troba productes per subcategoria (no implementat)
     @Override
     public Set<Product> findAllProducts(String subcategory) {
         return null;
     }
 
+    // Troba producte pel nom
     @Override
     public Product findProductsByName(String name) {
         return productRepository.findByName(name);
     }
 
+    // Guarda un producte
     @Override
     public void save(Product product) {
         productRepository.save(product);
     }
 
+    // Augmenta el preu d'un producte
     @Override
     public void increasePrice(Product product) {
         if (product != null) {
-            // Define el porcentaje de aumento. Por ejemplo, un 10% de aumento.
-            float increasePercentage = 0.10f;
-            
-            // Calcula el nuevo precio.
+            float increasePercentage = 0.10f; // 10% d'augment
             float newPrice = product.getPrice() * (1 + increasePercentage);
-            
-            // Actualiza el precio del producto.
             product.setPrice(newPrice);
-            
-            // Guarda el producto actualizado en la base de datos.
             productRepository.save(product);
         }
     }

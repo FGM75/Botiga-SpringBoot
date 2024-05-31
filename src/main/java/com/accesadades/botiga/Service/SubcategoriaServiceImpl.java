@@ -11,11 +11,13 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
     @Autowired
     private SubcategoriaRepository subcategoriaRepository;
 
+    // Troba subcategoria pel nom
     @Override
     public Subcategoria findByName(String name) {
         return subcategoriaRepository.findByName(name);
     }
 
+    // Guarda una subcategoria
     @Override
     public void save(Subcategoria subcategoria) {
         subcategoriaRepository.save(subcategoria);

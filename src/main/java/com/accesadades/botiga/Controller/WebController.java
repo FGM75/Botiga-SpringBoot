@@ -9,10 +9,10 @@ import com.accesadades.botiga.Service.*;
 
 import java.util.Set;
 
-@Controller
+@Controller // Marca aquesta classe com un controlador de Spring MVC
 public class WebController {
 
-    @Autowired
+    @Autowired // Dependencies ProductService, CategoriaService, i SubcategoriaService
     private ProductService productService;
 
     @Autowired
@@ -21,34 +21,34 @@ public class WebController {
     @Autowired
     private SubcategoriaService subcategoriaService;
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/") // Gestiona les peticions a la ruta arrel
     public String index(Model model) {
         return "index";
     }
 
-    @RequestMapping(value = "/catalog")
+    @RequestMapping(value = "/catalog") // Gestiona les peticions a la ruta "/catalog"
     public String catalog(Model model) {
-        Set<Product> products = productService.findAllProducts();
-        model.addAttribute("products", products);
+        Set<Product> products = productService.findAllProducts(); // Agafa tots els productes
+        model.addAttribute("products", products); // Afegeix els productes al model
         return "catalog";
     }
 
-    @RequestMapping(value = {"/search", "/prodname"}, method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = {"/search", "/prodname"}, method = {RequestMethod.GET, RequestMethod.POST}) // Gestiona peticions GET i POST a les rutes "/search" i "/prodname"
     public String searchProductByName(@RequestParam(value = "name", required = false) String name, Model model) {
         if (name != null) {
-            Product product = productService.findProductsByName(name);
-            model.addAttribute("product", product);
+            Product product = productService.findProductsByName(name); // Cerca un producte pel seu nom
+            model.addAttribute("product", product); // Afegeix el producte al model
         }
-        return "search"; // Referencia a search.html en el directorio templates
+        return "search";
     }
 
-    @GetMapping("/productes/desar")
+    @GetMapping("/productes/desar") // Gestiona peticions GET a la ruta "/productes/desar"
     public String showCreateProductForm(Model model) {
-        model.addAttribute("product", new Product());
-        return "product";
+        model.addAttribute("product", new Product()); // Afegeix un nou objecte Product al model
+        return "product"; // Retorna la vista "product.html"
     }
 
-    @PostMapping("/productes/desar")
+    @PostMapping("/productes/desar") // Gestiona peticions POST a la ruta "/productes/desar"
     public String saveProduct(@RequestParam String nom,
                               @RequestParam String descripcio,
                               @RequestParam long unitats,
@@ -58,30 +58,30 @@ public class WebController {
                               @RequestParam String categoria,
                               Model model) {
 
-        // Verifica si la categoría existe
+        // Verifica si la categoria existeix
         Categoria existingCategory = categoriaService.findByName(categoria);
         if (existingCategory == null) {
-            // Crea una nueva categoría si no existe
+            // Crea una nova categoria si no existeix
             existingCategory = new Categoria();
             existingCategory.setName(categoria);
             categoriaService.save(existingCategory);
         }
 
-        // Verifica si la subcategoría existe y pertenece a la categoría dada
+        // Verifica si la subcategoria existeix i pertany a la categoria donada
         Subcategoria existingSubcategory = subcategoriaService.findByName(subcategoria);
         if (existingSubcategory == null) {
-            // Crea una nueva subcategoría si no existe
+            // Crea una nova subcategoria si no existeix
             existingSubcategory = new Subcategoria();
             existingSubcategory.setName(subcategoria);
             existingSubcategory.setCategoria(existingCategory);
             subcategoriaService.save(existingSubcategory);
         } else if (!existingSubcategory.getCategoria().getName().equals(categoria)) {
-            // Si la subcategoría no corresponde a la categoría, lanza un error
-            model.addAttribute("error", "La subcategoría no corresponde a la categoría dada.");
+            // Si la subcategoria no correspon a la categoria dona error
+            model.addAttribute("error", "La subcategoria no correspon a la categoria donada.");
             return "product";
         }
 
-        // Crea y guarda el nuevo producto
+        // Crea i guarda el nou producte
         Product product = new Product();
         product.setName(nom);
         product.setDescription(descripcio);
@@ -90,6 +90,6 @@ public class WebController {
         product.setCompany(fabricant);
         productService.save(product);
 
-        return "redirect:/catalog";
+        return "redirect:/catalog"; // Redirigeix a la pàgina del catàleg
     }
 }
